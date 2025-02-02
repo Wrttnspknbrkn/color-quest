@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { GameTile } from './GameTile';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from './ui/button';
+import { PowerUpButton } from './PowerUpButton';
+import { soundManager } from '@/utils/sounds';
+import { Volume2, VolumeX } from 'lucide-react';
 
 const BOARD_SIZE = 8;
 const COLORS = ['blue', 'pink', 'yellow', 'purple', 'green', 'orange'];
@@ -11,6 +14,7 @@ export const GameBoard = () => {
   const [board, setBoard] = useState<string[][]>([]);
   const [score, setScore] = useState(0);
   const [selectedTile, setSelectedTile] = useState<{row: number, col: number} | null>(null);
+  const [isMuted, setIsMuted] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -74,6 +78,9 @@ export const GameBoard = () => {
     const points = calculatePoints(matches.length);
     setScore(prev => prev + points);
 
+    // Play match sound
+    soundManager.playSound('match');
+
     // Show score animation
     toast({
       title: `+${points} points!`,
@@ -109,6 +116,43 @@ export const GameBoard = () => {
     setBoard(newBoard);
   };
 
+  const handleRainbowBlast = () => {
+    if (selectedTile) {
+      const color = board[selectedTile.row][selectedTile.col];
+      const matches: Array<[number, number]> = [];
+      
+      // Find all tiles of the same color
+      for (let row = 0; row < BOARD_SIZE; row++) {
+        for (let col = 0; col < BOARD_SIZE; col++) {
+          if (board[row][col] === color) {
+            matches.push([row, col]);
+          }
+        }
+      }
+
+      if (matches.length > 0) {
+        soundManager.playSound('powerup');
+        handleMatch(matches);
+        toast({
+          title: "Rainbow Blast!",
+          description: `Cleared all ${color} tiles!`,
+          duration: 2000,
+        });
+      }
+    } else {
+      toast({
+        title: "Select a tile first!",
+        description: "Click a tile to use Rainbow Blast",
+        duration: 2000,
+      });
+    }
+  };
+
+  const toggleMute = () => {
+    soundManager.toggleMute();
+    setIsMuted(!isMuted);
+  };
+
   const calculatePoints = (matchLength: number): number => {
     // Base points for minimum match (3)
     let points = 100;
@@ -122,6 +166,7 @@ export const GameBoard = () => {
   };
 
   const handleTileClick = (row: number, col: number) => {
+    setSelectedTile({ row, col });
     const { matched, tiles } = checkMatches(row, col);
     
     if (matched) {
@@ -132,14 +177,34 @@ export const GameBoard = () => {
   return (
     <div className="w-full max-w-2xl mx-auto p-4">
       <div className="mb-4 text-center space-y-4">
-        <h2 className="text-2xl font-poppins font-bold text-game-blue">Score: {score}</h2>
-        <Button 
-          variant="outline"
-          onClick={initializeBoard}
-          className="bg-white/20 backdrop-blur-sm"
-        >
-          Reset Game
-        </Button>
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-poppins font-bold text-game-blue">Score: {score}</h2>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleMute}
+            className="ml-2"
+          >
+            {isMuted ? (
+              <VolumeX className="h-6 w-6" />
+            ) : (
+              <Volume2 className="h-6 w-6" />
+            )}
+          </Button>
+        </div>
+        <div className="flex justify-center gap-4">
+          <Button 
+            variant="outline"
+            onClick={initializeBoard}
+            className="bg-white/20 backdrop-blur-sm"
+          >
+            Reset Game
+          </Button>
+          <PowerUpButton
+            onClick={handleRainbowBlast}
+            disabled={!selectedTile}
+          />
+        </div>
       </div>
       <div className="grid grid-cols-8 gap-1 bg-white/20 backdrop-blur-sm rounded-lg p-2 shadow-xl">
         {board.map((row, rowIndex) => (
