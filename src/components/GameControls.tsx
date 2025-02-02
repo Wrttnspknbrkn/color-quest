@@ -1,18 +1,24 @@
 import React from 'react';
 import { Button } from './ui/button';
 import { PowerUpButton } from './PowerUpButton';
+import { useAchievements } from './AchievementSystem';
 
 interface GameControlsProps {
   onReset: () => void;
   onRainbowBlast: () => void;
   isRainbowBlastDisabled: boolean;
+  score: number;
 }
 
 export const GameControls: React.FC<GameControlsProps> = ({
   onReset,
   onRainbowBlast,
   isRainbowBlastDisabled,
+  score,
 }) => {
+  const { isRainbowBlastUnlocked } = useAchievements(score);
+  const rainbowUnlocked = isRainbowBlastUnlocked();
+
   return (
     <div className="flex justify-center gap-4 mb-4">
       <Button 
@@ -22,10 +28,12 @@ export const GameControls: React.FC<GameControlsProps> = ({
       >
         Reset Game
       </Button>
-      <PowerUpButton
-        onClick={onRainbowBlast}
-        disabled={isRainbowBlastDisabled}
-      />
+      {rainbowUnlocked && (
+        <PowerUpButton
+          onClick={onRainbowBlast}
+          disabled={isRainbowBlastDisabled}
+        />
+      )}
     </div>
   );
 };

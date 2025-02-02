@@ -161,6 +161,7 @@ export const GameBoard = () => {
         onReset={initializeBoard}
         onRainbowBlast={handleRainbowBlast}
         isRainbowBlastDisabled={!selectedTile}
+        score={score}
       />
       <div className="grid grid-cols-8 gap-1 bg-white/20 backdrop-blur-sm rounded-lg p-2 shadow-xl">
         {board.map((row, rowIndex) => (

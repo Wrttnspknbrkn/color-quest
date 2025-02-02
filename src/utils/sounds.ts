@@ -6,10 +6,16 @@ class SoundManager {
   private constructor() {
     // Sweet chime sound for matches
     this.sounds = {
-      match: new Audio('data:audio/wav;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQxAADB8AhEAGbaAIAAA0gAAAAATEFMRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//tQxBYAAANIAAAAAAAAAA0gAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//tQxDqAAANIAAAAAAAAAA0gAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV'),
-      powerup: new Audio('data:audio/wav;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQxAADB8AhEAGbaAIAAA0gAAAAATEFMRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//tQxBYAAANIAAAAAAAAAA0gAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV'),
-      land: new Audio('data:audio/wav;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQxAADB8AhEAGbaAIAAA0gAAAAATEFMRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV')
+      match: new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3'),
+      powerup: new Audio('https://assets.mixkit.co/active_storage/sfx/2578/2578-preview.mp3'),
+      land: new Audio('https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3')
     };
+
+    // Preload sounds
+    Object.values(this.sounds).forEach(sound => {
+      sound.load();
+      sound.volume = 0.3; // Set a comfortable volume level
+    });
   }
 
   public static getInstance(): SoundManager {
@@ -25,6 +31,7 @@ class SoundManager {
       sound.currentTime = 0;
       sound.play().catch(() => {
         // Ignore autoplay errors
+        console.log('Sound playback failed');
       });
     }
   }

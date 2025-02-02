@@ -26,6 +26,13 @@ const ACHIEVEMENTS: Achievement[] = [
     unlocked: false,
   },
   {
+    id: 'rainbow_unlock',
+    title: 'Rainbow Power',
+    description: 'Unlock the Rainbow Blast power-up!',
+    condition: (score) => score >= 300,
+    unlocked: false,
+  },
+  {
     id: 'score_1000',
     title: 'Rainbow Champion',
     description: 'Achieve 1000 points',
@@ -71,5 +78,10 @@ export const useAchievements = (score: number) => {
     });
   };
 
-  return { showMotivationalPhrase };
+  const isRainbowBlastUnlocked = () => {
+    const achievements = JSON.parse(localStorage.getItem('achievements') || '[]');
+    return achievements.includes('rainbow_unlock');
+  };
+
+  return { showMotivationalPhrase, isRainbowBlastUnlocked };
 };
