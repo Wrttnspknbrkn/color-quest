@@ -13,7 +13,7 @@ const colorClasses = {
   purple: 'bg-game-purple',
   green: 'bg-game-green',
   orange: 'bg-game-orange',
-  '': 'bg-transparent', // For empty tiles during animations
+  '': 'bg-transparent',
 };
 
 export const GameTile: React.FC<GameTileProps> = ({ color, onClick }) => {
@@ -26,13 +26,24 @@ export const GameTile: React.FC<GameTileProps> = ({ color, onClick }) => {
         'shadow-md hover:shadow-lg',
         colorClasses[color as keyof typeof colorClasses],
         'focus:outline-none focus:ring-2 focus:ring-white/50',
-        'animate-tile-pop', // Add pop animation
-        color === '' && 'animate-tile-fade', // Add fade animation for clearing
+        'relative overflow-hidden',
+        'animate-tile-pop', // Pop animation on appear
+        color === '' && 'animate-tile-fade', // Fade animation for clearing
+        'after:content-[""] after:absolute after:inset-0',
+        'after:bg-white/20 after:opacity-0 after:transition-opacity',
+        'hover:after:opacity-100',
+        // Particle effects
+        'before:content-[""] before:absolute before:inset-0',
+        'before:bg-[radial-gradient(circle,_var(--tw-gradient-stops))]',
+        'before:from-white/40 before:to-transparent',
+        'before:scale-0 before:opacity-0',
+        'before:transition-all before:duration-300',
+        'active:before:scale-100 active:before:opacity-100',
       )}
       aria-label={`${color} tile`}
       disabled={color === ''}
     >
-      {/* Pattern for colorblind mode - can be toggled later */}
+      {/* Pattern for colorblind mode */}
       <div className={cn(
         'w-full h-full flex items-center justify-center',
         'opacity-0 group-hover:opacity-100 transition-opacity'

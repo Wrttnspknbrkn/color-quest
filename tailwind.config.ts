@@ -71,23 +71,39 @@ export default {
       },
       keyframes: {
         "tile-pop": {
-          "0%": { transform: "scale(1)" },
+          "0%": { transform: "scale(0.8)", opacity: "0" },
           "50%": { transform: "scale(1.1)" },
-          "100%": { transform: "scale(1)" },
+          "100%": { transform: "scale(1)", opacity: "1" },
         },
         "tile-fade": {
-          "0%": { opacity: "1" },
-          "100%": { opacity: "0" },
+          "0%": { transform: "scale(1)", opacity: "1" },
+          "100%": { transform: "scale(0.8)", opacity: "0" },
         },
         "tile-fall": {
-          "0%": { transform: "translateY(-100%)" },
+          "0%": { 
+            transform: "translateY(-100%)",
+            opacity: "0"
+          },
+          "50%": {
+            opacity: "1"
+          },
+          "100%": { 
+            transform: "translateY(0)",
+            opacity: "1"
+          },
+        },
+        "tile-bounce": {
+          "0%": { transform: "translateY(-5px)" },
+          "50%": { transform: "translateY(0)" },
+          "75%": { transform: "translateY(-3px)" },
           "100%": { transform: "translateY(0)" },
         },
       },
       animation: {
-        "tile-pop": "tile-pop 0.3s ease-in-out",
+        "tile-pop": "tile-pop 0.3s ease-out",
         "tile-fade": "tile-fade 0.3s ease-out",
         "tile-fall": "tile-fall 0.5s ease-in-out",
+        "tile-bounce": "tile-bounce 0.3s ease-in-out",
       },
     },
   },
