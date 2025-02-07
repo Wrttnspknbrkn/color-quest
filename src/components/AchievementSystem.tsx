@@ -29,7 +29,7 @@ const ACHIEVEMENTS: Achievement[] = [
     id: 'rainbow_unlock',
     title: 'Rainbow Power',
     description: 'Unlock the Rainbow Blast power-up!',
-    condition: (score) => score >= 300,
+    condition: (score) => score >= 400,
     unlocked: false,
   },
   {
@@ -39,6 +39,13 @@ const ACHIEVEMENTS: Achievement[] = [
     condition: (score) => score >= 1000,
     unlocked: false,
   },
+  {
+    id: 'diagonal_master',
+    title: 'Diagonal Master',
+    description: 'Clear a diagonal line of tiles',
+    condition: (score) => score >= 300,
+    unlocked: false,
+  }
 ];
 
 const MOTIVATIONAL_PHRASES = [
