@@ -35,3 +35,13 @@
     @apply bg-background text-foreground font-poppins;
   }
 }
+
+#lovable-badge {
+    display: none !important;
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
